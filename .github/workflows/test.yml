@@ -2,9 +2,9 @@ name: Test
 
 on:
   push:
-    branches: [ develop, main ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop, main ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -42,7 +42,7 @@ jobs:
     
   integration-test:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     
     steps:
     - uses: actions/checkout@v4
@@ -63,9 +63,17 @@ jobs:
     - name: Download dependencies
       run: go mod download
     
+    - name: Start Docker services
+      run: |
+        docker-compose -f docker-compose.test.yml up -d minio
+        sleep 10
+    
     - name: Run integration tests
       run: |
         cd test/integration
-        go test -v -tags=integration ./...
+        go test -v -tags=integration -timeout=10m ./...
       env:
-        DOCKER_HOST: unix:///var/run/docker.sock
+        CI: true
+        MINIO_ENDPOINT: http://localhost:9000
+        MINIO_ACCESS_KEY: minioadmin
+        MINIO_SECRET_KEY: minioadmin
