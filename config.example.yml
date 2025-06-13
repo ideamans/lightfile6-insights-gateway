@@ -1,0 +1,38 @@
+# Lightfile6 Insights Gateway Configuration Example
+
+# Cache directory for temporary file storage
+cache_dir: /var/lib/lightfile6-insights-gateway
+
+# AWS configuration
+aws:
+  # AWS region
+  region: ap-northeast-1
+  
+  # AWS credentials (optional - uses default credentials chain if not specified)
+  # access_key_id: your-access-key
+  # secret_access_key: your-secret-key
+  
+  # Custom endpoint (for MinIO, LocalStack, etc.)
+  # endpoint: http://localhost:9000
+
+# S3 bucket configuration
+s3:
+  # Usage data bucket (required)
+  usage_bucket: lightfile6-usage
+  # usage_prefix: usage/
+  
+  # Error data bucket (required)
+  error_bucket: lightfile6-error
+  # error_prefix: error/
+  
+  # Specimen files bucket (required)
+  specimen_bucket: lightfile6-specimen
+  # specimen_prefix: specimen/
+
+# Aggregation intervals
+aggregation:
+  # Interval for aggregating usage files (default: 10m)
+  usage_interval: 10m
+  
+  # Interval for aggregating error files (default: 10m)
+  error_interval: 10m
